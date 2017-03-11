@@ -7,7 +7,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import com.brycevalero.starships.framework.Config;
@@ -40,9 +39,9 @@ public class Game extends JPanel {
 		setFocusable(true);
 		setBackground(Color.BLACK);
 
-		ImageIcon heroIcon = new ImageIcon("images/hero.png");
+		// ImageIcon heroIcon = new ImageIcon("images/hero.png");
 
-		hero = new Hero(heroIcon, 50, 100, Config.SCREEN);
+		hero = new Hero("images/hero.png", 50, 100, Config.SCREEN);
 		enemies = new ArrayList<Enemy>();
 		ammo = new ArrayList<Weapon>();
 
@@ -62,6 +61,8 @@ public class Game extends JPanel {
 		themeSong = new Music("sound/TechnoWarmup.wav");
 		themeSong.loop(100);
 		themeSong.play();
+
+		state = State.PLAY;
 	}
 
 	public void loop() {
@@ -81,8 +82,8 @@ public class Game extends JPanel {
 	}
 
 	public void addEnemy() {
-		ImageIcon enemyIcon = new ImageIcon("images/enemy.png");
-		enemies.add(new Enemy(enemyIcon, 0, 0, Config.SCREEN));
+		// ImageIcon enemyIcon = new ImageIcon("images/enemy.png");
+		enemies.add(new Enemy("images/enemy.png", 0, 0, Config.SCREEN));
 	}
 
 	public void removeEnemy() {
@@ -112,13 +113,22 @@ public class Game extends JPanel {
 			Enemy enemy = enemies.get(i);
 			enemy.move();
 
-			if (hero.getBounds()[0].intersects(enemy.getBounds()[0])) {
+			if (hero.getBounds().intersects(enemy.getBounds())) {
 				System.out.println("collision");
 				enemies.remove(i);
 				SoundFX.play("sound/explode.wav");
 			}
 
-			g2d.drawImage(enemy.getImage(), enemy.getX(), enemy.getY(), this);
+			for (int j = 0; j < ammo.size(); j++) {
+				if (ammo.get(j).getBounds().intersects(enemy.getBounds())) {
+					ammo.remove(j);
+					enemies.remove(i);
+				}
+			}
+
+			enemy.draw(g2d);
+			// g2d.drawImage(enemy.getImage(), enemy.getX(), enemy.getY(),
+			// this);
 		}
 
 		for (int i = 0; i < ammo.size(); i++) {
@@ -131,16 +141,28 @@ public class Game extends JPanel {
 		}
 
 		hero.move();
-		g2d.drawImage(hero.getImage(), hero.getX(), hero.getY(), this);
+		hero.draw(g2d);
+		// g2d.drawImage(hero.getImage(), hero.getX(), hero.getY(), this);
 	}
 
 	public void keyTyped(KeyEvent e) {
 	}
 
 	public void keyPressed(KeyEvent e) {
-		hero.keyPressed(e);
-
 		int key = e.getKeyCode();
+
+		if (key == KeyEvent.VK_LEFT) {
+			hero.moveleft(true);
+		}
+		if (key == KeyEvent.VK_RIGHT) {
+			hero.moveright(true);
+		}
+		if (key == KeyEvent.VK_UP) {
+			hero.moveup(true);
+		}
+		if (key == KeyEvent.VK_DOWN) {
+			hero.movedown(true);
+		}
 		if (key == KeyEvent.VK_SPACE) {
 			fireAmmo();
 			SoundFX.play("sound/Gun_Silencer.wav");
@@ -148,7 +170,20 @@ public class Game extends JPanel {
 	}
 
 	public void keyReleased(KeyEvent e) {
-		hero.keyReleased(e);
+		int key = e.getKeyCode();
+
+		if (key == KeyEvent.VK_LEFT) {
+			hero.moveleft(false);
+		}
+		if (key == KeyEvent.VK_RIGHT) {
+			hero.moveright(false);
+		}
+		if (key == KeyEvent.VK_UP) {
+			hero.moveup(false);
+		}
+		if (key == KeyEvent.VK_DOWN) {
+			hero.movedown(false);
+		}
 	}
 
 	public void actionPerformed(ActionEvent e) {

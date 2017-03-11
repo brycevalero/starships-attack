@@ -1,11 +1,8 @@
 package com.brycevalero.starships.game;
 
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Random;
-
-import javax.swing.ImageIcon;
 
 import com.brycevalero.starships.framework.Config;
 
@@ -13,7 +10,7 @@ public class Enemy extends Sprite {
 
 	private Random random;
 
-	public Enemy(ImageIcon img, int startx, int starty, Dimension bounds) {
+	public Enemy(String img, int startx, int starty, Dimension bounds) {
 		super(img, startx, starty, bounds);
 
 		random = new Random();
@@ -21,11 +18,6 @@ public class Enemy extends Sprite {
 		x = random.nextInt(Config.SCREEN.width);
 		y = (-100);
 		setGravity();
-	}
-
-	public void draw(Graphics2D g2d) {
-		// g2d.drawImage(this.getImage(), (int)this.getX(), (int)this.getY(),
-		// this);
 	}
 
 	public void setGravity() {
@@ -70,7 +62,7 @@ public class Enemy extends Sprite {
 		checkBounds();
 	}
 
-	public Rectangle[] getBounds() {
+	public Rectangle getBounds() {
 		Rectangle[] bounds = new Rectangle[2];
 
 		// return a 30 x 100 rectangle for fuselage
@@ -79,7 +71,7 @@ public class Enemy extends Sprite {
 		// return a 100 x 15 rectangle for wings
 		bounds[1] = new Rectangle((int) x, (int) (y + 30), 100, 15);
 
-		return bounds;
+		return bounds[0];
 	}
 
 }

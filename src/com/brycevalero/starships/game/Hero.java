@@ -1,64 +1,29 @@
 package com.brycevalero.starships.game;
 
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
 
-import javax.swing.ImageIcon;
-
+@SuppressWarnings("serial")
 public class Hero extends Sprite {
 
-	public Hero(ImageIcon img, int startx, int starty, Dimension bounds) {
+	public Hero(String img, int startx, int starty, Dimension bounds) {
 		super(img, startx, starty, bounds);
-		// TODO Auto-generated constructor stub
 	}
 
-	public void draw(Graphics2D g2d) {
-		// g2d.drawImage(this.getImage(), (int)this.getX(), (int)this.getY(),
-		// this);
+	public void moveleft(boolean moving) {
+		moveleft = moving;
 	}
 
-	public void keyPressed(KeyEvent e) {
-
-		int key = e.getKeyCode();
-
-		if (key == KeyEvent.VK_LEFT) {
-			moveleft = true;
-		}
-
-		if (key == KeyEvent.VK_RIGHT) {
-			moveright = true;
-		}
-
-		if (key == KeyEvent.VK_UP) {
-			moveup = true;
-		}
-
-		if (key == KeyEvent.VK_DOWN) {
-			movedown = true;
-		}
+	public void moveright(boolean moving) {
+		moveright = moving;
 	}
 
-	public void keyReleased(KeyEvent e) {
+	public void moveup(boolean moving) {
+		moveup = moving;
+	}
 
-		int key = e.getKeyCode();
-
-		if (key == KeyEvent.VK_LEFT) {
-			moveleft = false;
-		}
-
-		if (key == KeyEvent.VK_RIGHT) {
-			moveright = false;
-		}
-
-		if (key == KeyEvent.VK_UP) {
-			moveup = false;
-		}
-
-		if (key == KeyEvent.VK_DOWN) {
-			movedown = false;
-		}
+	public void movedown(boolean moving) {
+		movedown = moving;
 	}
 
 	public void gravity() {
@@ -125,10 +90,9 @@ public class Hero extends Sprite {
 		if (moveright) {
 			dx += speed;
 		}
-
 	}
 
-	public Rectangle[] getBounds() {
+	public Rectangle getBounds() {
 		Rectangle[] bounds = new Rectangle[2];
 
 		// return a 20 x 100 rectangle for fuselage
@@ -137,7 +101,7 @@ public class Hero extends Sprite {
 		// return a 100 x 20 rectangle for wings
 		bounds[1] = new Rectangle((int) x, (int) (y + 70), 100, 20);
 
-		return bounds;
+		return bounds[0];
 	}
 
 }

@@ -2,22 +2,22 @@ package com.brycevalero.starships.screens;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import com.brycevalero.starships.framework.Config;
-import com.brycevalero.starships.game.Hero;
 import com.brycevalero.starships.sound.Music;
 
 @SuppressWarnings("serial")
 public class TitleScreen extends JPanel {
 
 	private Music themeSong;
-	private Hero hero;
+	private Image title;
 
 	public static enum State {
-		PLAY, PAUSE, GAMEOVER, DESTROYED
+		ACTIVE, IDLE
 	}
 
 	public static State state;
@@ -30,35 +30,30 @@ public class TitleScreen extends JPanel {
 
 		setFocusable(true);
 		setBackground(Color.BLUE);
-
-		ImageIcon heroIcon = new ImageIcon("images/hero.png");
-		hero = new Hero(heroIcon, 50, 100, Config.SCREEN);
+		title = Toolkit.getDefaultToolkit().getImage("images/title.png");
 
 		themeSong = new Music("sound/TechnoWarmup.wav");
-		themeSong.loop(100);
-		themeSong.play();
+		state = State.IDLE;
+
 	}
 
 	public void loop() {
 		switch (state) {
-		case PLAY:
+		case ACTIVE:
+			themeSong.loop(100);
+			themeSong.play();
 			break;
-		case PAUSE:
-			// ...
-			break;
-		case GAMEOVER:
-			// ...
-			break;
-		case DESTROYED:
-			// ...
+		case IDLE:
+			themeSong.stop();
 			break;
 		}
 	}
 
 	public void draw(Graphics2D g2d) {
-		hero.move();
-		g2d.drawImage(hero.getImage(), hero.getX(), hero.getY(), this);
-		// return;
+		int x = (Config.SCREEN.width - title.getWidth(null)) / 2;
+		int y = (Config.SCREEN.height - title.getHeight(null)) / 2;
+
+		g2d.drawImage(title, x, y, this);
 	}
 
 }

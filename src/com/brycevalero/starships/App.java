@@ -26,8 +26,8 @@ public class App {
 																// the window is
 																// closed
 		// sets full screen
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		frame.setUndecorated(true);
+		// frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		// frame.setUndecorated(true);
 
 		frame.setLocationRelativeTo(null);// Centers window
 		frame.setVisible(true);// Make the window visible

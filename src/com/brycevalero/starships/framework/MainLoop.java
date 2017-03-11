@@ -51,7 +51,7 @@ public class MainLoop extends Canvas implements KeyListener {
 	 * Possible states of the game
 	 */
 	public static enum MainState {
-		VISUALIZING, STARTING, TITLE_SCREEN, GAME_PLAY
+		VISUALIZING, INITIALIZING, TITLE_SCREEN, GAME_PLAY
 	}
 
 	/**
@@ -77,8 +77,6 @@ public class MainLoop extends Canvas implements KeyListener {
 		// Adds the keyboard listener to JPanel.
 		this.addKeyListener(this);
 
-		titleScreen = new TitleScreen();
-		newGame();
 		mainState = MainState.VISUALIZING;
 
 		// We start game in new thread.
@@ -97,7 +95,8 @@ public class MainLoop extends Canvas implements KeyListener {
 	 * be set in Game.java.
 	 */
 	private void Initialize() {
-
+		newTitleScreen();
+		newGame();
 	}
 
 	/**
@@ -124,18 +123,21 @@ public class MainLoop extends Canvas implements KeyListener {
 
 		while (true) {
 			beginTime = System.nanoTime();
-			// System.out.println(gameState);
 
 			switch (mainState) {
 			case GAME_PLAY:
 				gameTime += System.nanoTime() - lastTime;
 				// game.UpdateGame(gameTime, mousePosition());
+				game.loop();
 				lastTime = System.nanoTime();
 				break;
 			case TITLE_SCREEN:
-				// ...
+				titleScreen.loop();
+				// if (TitleScreen.state == TitleScreen.State.IDLE) {
+				// mainState = MainState.GAME_PLAY;
+				// }
 				break;
-			case STARTING:
+			case INITIALIZING:
 				// Sets variables and objects.
 				Initialize();
 				// Load files - images, sounds, ...
@@ -156,9 +158,7 @@ public class MainLoop extends Canvas implements KeyListener {
 				if (this.getWidth() > 1 && visualizingTime > secInNanosec) {
 					frameWidth = this.getWidth();
 					frameHeight = this.getHeight();
-
-					// When we get size of frame we change status.
-					mainState = MainState.STARTING;
+					mainState = MainState.INITIALIZING;
 				} else {
 					visualizingTime += System.nanoTime() - lastVisualizingTime;
 					lastVisualizingTime = System.nanoTime();
@@ -204,6 +204,10 @@ public class MainLoop extends Canvas implements KeyListener {
 			// ...
 			break;
 		}
+	}
+
+	private void newTitleScreen() {
+		titleScreen = new TitleScreen();
 	}
 
 	/**
@@ -264,6 +268,7 @@ public class MainLoop extends Canvas implements KeyListener {
 			break;
 		case TITLE_SCREEN:
 			if (key == KeyEvent.VK_ENTER) {
+				// TitleScreen.state = TitleScreen.State.IDLE;
 				mainState = MainState.GAME_PLAY;
 			}
 			break;
@@ -276,7 +281,7 @@ public class MainLoop extends Canvas implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// game.keyReleased(e);
+		game.keyReleased(e);
 	}
 
 	@Override

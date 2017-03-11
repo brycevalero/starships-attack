@@ -3,6 +3,7 @@ package com.brycevalero.starships.game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 public class Weapon {
 
@@ -20,10 +21,14 @@ public class Weapon {
 		offscreen = false;
 	}
 
-	public void checkBounds() {
+	public void checkBoundries() {
 		if (position.y < -100) {
 			offscreen = true;
 		}
+	}
+
+	public Rectangle getBounds() {
+		return new Rectangle(position.x, position.y, diameter, diameter);
 	}
 
 	public Point getPosition() {
@@ -37,7 +42,7 @@ public class Weapon {
 	public void move() {
 		position.y = (position.y - speed);
 
-		checkBounds();
+		checkBoundries();
 	}
 
 	public void draw(Graphics g) {

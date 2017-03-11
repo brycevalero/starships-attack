@@ -1,12 +1,15 @@
 package com.brycevalero.starships.game;
 
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Toolkit;
 
-import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
-public abstract class Sprite {
+@SuppressWarnings("serial")
+public abstract class Sprite extends JPanel {
 
 	protected Dimension screenSize;
 	protected double dx;
@@ -30,11 +33,10 @@ public abstract class Sprite {
 	protected boolean grounded;
 	protected boolean collision;
 
-	public Sprite(ImageIcon img, int startx, int starty, Dimension bounds) {
+	public Sprite(String img, int startx, int starty, Dimension bounds) {
 
 		screenSize = bounds;
-		ImageIcon ii = img;
-		image = ii.getImage();
+		image = Toolkit.getDefaultToolkit().getImage(img);
 		width = 100;
 		height = 100;
 		x = startx;
@@ -76,6 +78,10 @@ public abstract class Sprite {
 		int centery = (int) (y + 50);
 		Point center = new Point(centerx, centery);
 		return center;
+	}
+
+	public void draw(Graphics2D g2d) {
+		g2d.drawImage(image, (int) x, (int) y, this);
 	}
 
 }
