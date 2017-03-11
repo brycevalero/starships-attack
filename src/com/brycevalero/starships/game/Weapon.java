@@ -12,6 +12,7 @@ public class Weapon {
 	private Point position;
 	private int speed;
 	private boolean offscreen;
+	private boolean fired;
 
 	public Weapon(Point coord) {
 		diameter = 15;
@@ -19,6 +20,7 @@ public class Weapon {
 		position = coord;
 		speed = 15;
 		offscreen = false;
+		fired = false;
 	}
 
 	public void checkBoundries() {

@@ -73,6 +73,10 @@ public abstract class Sprite extends JPanel {
 		return image;
 	}
 
+	public Point getPosition() {
+		return new Point((int) x, (int) y);
+	}
+
 	public Point getCenter() {
 		int centerx = (int) (x + 50);
 		int centery = (int) (y + 50);

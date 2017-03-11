@@ -2,6 +2,7 @@ package com.brycevalero.starships.game;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class Game extends JPanel {
 	private Star[] star;
 	List<Enemy> enemies;
 	List<Weapon> ammo;
+	List<Explosion> explosions;
 	private Music themeSong;
 	private int enemyCount;
 
@@ -44,6 +46,7 @@ public class Game extends JPanel {
 		hero = new Hero("images/hero.png", 50, 100, Config.SCREEN);
 		enemies = new ArrayList<Enemy>();
 		ammo = new ArrayList<Weapon>();
+		explosions = new ArrayList<Explosion>();
 
 		star = new Star[numOfStars];
 		for (int i = 0; i < numOfStars; i++) {
@@ -60,7 +63,7 @@ public class Game extends JPanel {
 
 		themeSong = new Music("sound/TechnoWarmup.wav");
 		themeSong.loop(100);
-		themeSong.play();
+		// themeSong.play();
 
 		state = State.PLAY;
 	}
@@ -92,6 +95,10 @@ public class Game extends JPanel {
 		}
 	}
 
+	public void addExplosion(Point p) {
+		explosions.add(new Explosion(p));
+	}
+
 	public void fireAmmo() {
 		ammo.add(new Weapon(hero.getCenter()));
 	}
@@ -104,6 +111,11 @@ public class Game extends JPanel {
 	 *            Graphics2D
 	 */
 	public void draw(Graphics2D g2d) {
+
+		if (state == State.PAUSE) {
+			return;
+		}
+
 		for (int i = 0; i < star.length; i++) {
 			star[i].move();
 			star[i].draw(g2d);
@@ -116,19 +128,21 @@ public class Game extends JPanel {
 			if (hero.getBounds().intersects(enemy.getBounds())) {
 				System.out.println("collision");
 				enemies.remove(i);
-				SoundFX.play("sound/explode.wav");
+				SoundFX.play("sound/explode2.wav");
 			}
 
 			for (int j = 0; j < ammo.size(); j++) {
 				if (ammo.get(j).getBounds().intersects(enemy.getBounds())) {
+
+					addExplosion(enemy.getPosition());
+					SoundFX.play("sound/explode.wav");
 					ammo.remove(j);
 					enemies.remove(i);
+
 				}
 			}
 
 			enemy.draw(g2d);
-			// g2d.drawImage(enemy.getImage(), enemy.getX(), enemy.getY(),
-			// this);
 		}
 
 		for (int i = 0; i < ammo.size(); i++) {
@@ -140,9 +154,15 @@ public class Game extends JPanel {
 			ammos.draw(g2d);
 		}
 
+		for (int i = 0; i < explosions.size(); i++) {
+			explosions.get(i).draw(g2d);
+			if (explosions.get(i).state == Explosion.State.FINISHED) {
+				explosions.remove(i);
+			}
+		}
+
 		hero.move();
 		hero.draw(g2d);
-		// g2d.drawImage(hero.getImage(), hero.getX(), hero.getY(), this);
 	}
 
 	public void keyTyped(KeyEvent e) {
