@@ -19,9 +19,10 @@ public class Game extends JPanel {
 
 	private Hero hero;
 	private Star[] star;
-	List<Enemy> enemies;
-	List<Weapon> ammo;
-	List<Explosion> explosions;
+	private List<Enemy> enemies;
+	private List<Weapon> ammo;
+	private List<Explosion> explosions;
+	private Dashboard dashboard;
 	private Music themeSong;
 	private int enemyCount;
 
@@ -61,6 +62,8 @@ public class Game extends JPanel {
 			addEnemy();
 		}
 
+		dashboard = Dashboard.getInstance();
+
 		themeSong = new Music("sound/TechnoWarmup.wav");
 		themeSong.loop(100);
 		// themeSong.play();
@@ -95,12 +98,83 @@ public class Game extends JPanel {
 		}
 	}
 
-	public void addExplosion(Point p) {
-		explosions.add(new Explosion(p));
-	}
-
 	public void fireAmmo() {
 		ammo.add(new Weapon(hero.getCenter()));
+	}
+
+	public void enemyCollision(Point position) {
+		explosions.add(new Explosion(position));
+		SoundFX.play("sound/explode.wav");
+		dashboard.score += 5;
+	}
+
+	public void heroCollision(Point position) {
+		explosions.add(new Explosion(position));
+		SoundFX.play("sound/explode2.wav");
+		dashboard.lives--;
+	}
+
+	public void checkCollision() {
+		for (int i = 0; i < enemies.size(); i++) {
+			for (int j = 0; j < ammo.size(); j++) {
+				if (ammo.get(j).getBounds().intersects(enemies.get(i).getBounds())) {
+					enemyCollision(enemies.get(i).getPosition());
+					ammo.remove(j);
+					enemies.remove(i);
+				}
+			}
+		}
+
+		// we have to loop through enemies again in case the size of list has
+		// changed
+		for (int i = 0; i < enemies.size(); i++) {
+			if (hero.getBounds().intersects(enemies.get(i).getBounds())) {
+				enemyCollision(enemies.get(i).getPosition());
+				heroCollision(enemies.get(i).getPosition());
+				enemies.remove(i);
+				hero.respawn();
+			}
+		}
+
+		for (int i = 0; i < ammo.size(); i++) {
+			if (ammo.get(i).isOffscreen()) {
+				ammo.remove(i);
+			}
+		}
+
+		for (int i = 0; i < explosions.size(); i++) {
+			if (explosions.get(i).state == Explosion.State.FINISHED) {
+				explosions.remove(i);
+			}
+		}
+	}
+
+	public void move() {
+
+		if (state == State.PAUSE) {
+			return;
+		}
+
+		for (int i = 0; i < star.length; i++) {
+			star[i].move();
+		}
+
+		for (int i = 0; i < enemies.size(); i++) {
+			enemies.get(i).move();
+		}
+
+		for (int i = 0; i < ammo.size(); i++) {
+			ammo.get(i).move();
+		}
+
+		for (int i = 0; i < explosions.size(); i++) {
+			// explosions dont move yet
+		}
+
+		hero.move();
+
+		// dont check collisions until all objects have been moved
+		checkCollision();
 	}
 
 	/**
@@ -112,57 +186,26 @@ public class Game extends JPanel {
 	 */
 	public void draw(Graphics2D g2d) {
 
-		if (state == State.PAUSE) {
-			return;
-		}
+		move();
 
 		for (int i = 0; i < star.length; i++) {
-			star[i].move();
 			star[i].draw(g2d);
 		}
 
 		for (int i = 0; i < enemies.size(); i++) {
-			Enemy enemy = enemies.get(i);
-			enemy.move();
-
-			if (hero.getBounds().intersects(enemy.getBounds())) {
-				System.out.println("collision");
-				enemies.remove(i);
-				SoundFX.play("sound/explode2.wav");
-			}
-
-			for (int j = 0; j < ammo.size(); j++) {
-				if (ammo.get(j).getBounds().intersects(enemy.getBounds())) {
-
-					addExplosion(enemy.getPosition());
-					SoundFX.play("sound/explode.wav");
-					ammo.remove(j);
-					enemies.remove(i);
-
-				}
-			}
-
-			enemy.draw(g2d);
+			enemies.get(i).draw(g2d);
 		}
 
 		for (int i = 0; i < ammo.size(); i++) {
-			Weapon ammos = ammo.get(i);
-			ammos.move();
-			if (ammos.isOffscreen()) {
-				ammo.remove(i);
-			}
-			ammos.draw(g2d);
+			ammo.get(i).draw(g2d);
 		}
 
 		for (int i = 0; i < explosions.size(); i++) {
 			explosions.get(i).draw(g2d);
-			if (explosions.get(i).state == Explosion.State.FINISHED) {
-				explosions.remove(i);
-			}
 		}
 
-		hero.move();
 		hero.draw(g2d);
+		dashboard.draw(g2d);
 	}
 
 	public void keyTyped(KeyEvent e) {

@@ -104,4 +104,8 @@ public class Hero extends Sprite {
 		return bounds[0];
 	}
 
+	public void respawn() {
+
+	}
+
 }
