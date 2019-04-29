@@ -1,7 +1,8 @@
 package com.brycevalero.starships.sound;
 
-import java.io.File;
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -15,9 +16,16 @@ public class Music {
 
 	public Music(String resource) {
 		try {
-			// Open an audio input stream.
-			File soundFile = new File(resource);
-			AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
+			// This can also be used for system wide resources
+			// InputStream soundStream =
+			// getClass().getResourceAsStream(resource);
+
+			// Use an input stream instead of a file so we can read resources in
+			// jar.
+			InputStream audioInputStream = Music.class.getResourceAsStream(resource);
+			// add buffer for mark/reset support
+			InputStream audioBuffered = new BufferedInputStream(audioInputStream);
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(audioBuffered);
 			// Get a sound clip resource.
 			clip = AudioSystem.getClip();
 			// Open audio clip and load samples from the audio input stream.

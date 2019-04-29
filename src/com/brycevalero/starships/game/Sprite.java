@@ -4,9 +4,12 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Toolkit;
+import java.net.URL;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
+import com.brycevalero.starships.screens.TitleScreen;
 
 @SuppressWarnings("serial")
 public abstract class Sprite extends JPanel {
@@ -36,7 +39,10 @@ public abstract class Sprite extends JPanel {
 	public Sprite(String img, int startx, int starty, Dimension bounds) {
 
 		screenSize = bounds;
-		image = Toolkit.getDefaultToolkit().getImage(img);
+
+		URL url = TitleScreen.class.getResource(img);
+		image = new ImageIcon(url).getImage();
+
 		width = 100;
 		height = 100;
 		x = startx;

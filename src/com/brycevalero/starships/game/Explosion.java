@@ -2,8 +2,12 @@ package com.brycevalero.starships.game;
 
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Toolkit;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
+
+import com.brycevalero.starships.screens.TitleScreen;
 
 @SuppressWarnings("serial")
 public class Explosion extends Animate {
@@ -15,16 +19,22 @@ public class Explosion extends Animate {
 
 		smallExplosion = new ArrayList<Image>();
 
-		smallExplosion.add(Toolkit.getDefaultToolkit().getImage("images/explosion1/ex1.png"));
-		smallExplosion.add(Toolkit.getDefaultToolkit().getImage("images/explosion1/ex2.png"));
-		smallExplosion.add(Toolkit.getDefaultToolkit().getImage("images/explosion1/ex3.png"));
-		smallExplosion.add(Toolkit.getDefaultToolkit().getImage("images/explosion1/ex4.png"));
-		smallExplosion.add(Toolkit.getDefaultToolkit().getImage("images/explosion1/ex5.png"));
-		smallExplosion.add(Toolkit.getDefaultToolkit().getImage("images/explosion1/ex6.png"));
-		smallExplosion.add(Toolkit.getDefaultToolkit().getImage("images/explosion1/ex7.png"));
+		this.addFrame("/images/explosion1/ex1.png");
+		this.addFrame("/images/explosion1/ex2.png");
+		this.addFrame("/images/explosion1/ex3.png");
+		this.addFrame("/images/explosion1/ex4.png");
+		this.addFrame("/images/explosion1/ex5.png");
+		this.addFrame("/images/explosion1/ex6.png");
+		this.addFrame("/images/explosion1/ex7.png");
 
 		setPosition(coord);
 		setImages(smallExplosion);
+	}
+
+	public void addFrame(String path) {
+		URL url = TitleScreen.class.getResource(path);
+		Image frame = new ImageIcon(url).getImage();
+		smallExplosion.add(frame);
 	}
 
 }

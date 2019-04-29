@@ -44,7 +44,7 @@ public class Game extends JPanel {
 
 		// ImageIcon heroIcon = new ImageIcon("images/hero.png");
 
-		hero = new Hero("images/hero.png", 50, 100, Config.SCREEN);
+		hero = new Hero("/images/hero.png", 50, 100, Config.SCREEN);
 		enemies = new ArrayList<Enemy>();
 		ammo = new ArrayList<Weapon>();
 		explosions = new ArrayList<Explosion>();
@@ -64,7 +64,7 @@ public class Game extends JPanel {
 
 		dashboard = Dashboard.getInstance();
 
-		themeSong = new Music("sound/TechnoWarmup.wav");
+		themeSong = new Music("/sound/TechnoWarmup.wav");
 		themeSong.loop(100);
 		// themeSong.play();
 
@@ -89,7 +89,7 @@ public class Game extends JPanel {
 
 	public void addEnemy() {
 		// ImageIcon enemyIcon = new ImageIcon("images/enemy.png");
-		enemies.add(new Enemy("images/enemy.png", 0, 0, Config.SCREEN));
+		enemies.add(new Enemy("/images/enemy.png", 0, 0, Config.SCREEN));
 	}
 
 	public void removeEnemy() {
@@ -104,13 +104,13 @@ public class Game extends JPanel {
 
 	public void enemyCollision(Point position) {
 		explosions.add(new Explosion(position));
-		SoundFX.play("sound/explode.wav");
+		SoundFX.play("/sound/explode.wav");
 		dashboard.score += 5;
 	}
 
 	public void heroCollision(Point position) {
 		explosions.add(new Explosion(position));
-		SoundFX.play("sound/explode2.wav");
+		SoundFX.play("/sound/explode2.wav");
 		dashboard.lives--;
 	}
 
@@ -228,7 +228,7 @@ public class Game extends JPanel {
 		}
 		if (key == KeyEvent.VK_SPACE) {
 			fireAmmo();
-			SoundFX.play("sound/Gun_Silencer.wav");
+			SoundFX.play("/sound/Gun_Silencer.wav");
 		}
 	}
 

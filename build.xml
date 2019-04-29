@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="StarShips">
+    <property environment="env"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+    <path id="StarShips.classpath">
+        <pathelement location="bin"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+    	<mkdir dir="jar"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin/images">
+            <fileset dir="images">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin/sound">
+            <fileset dir="sound">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    	<delete dir="jar"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <src path="images"/>
+            <src path="sound"/>
+            <classpath refid="StarShips.classpath"/>
+        </javac>
+    </target>
+    
+  	<target name="jar">
+        <mkdir dir="jar"/>
+        <jar destfile="jar/StarShips.jar" baseDir="bin">
+            <manifest>
+                <attribute name="Main-Class" value="com.brycevalero.starships.StarShips"/>
+            	<attribute name="Class-Path" value="StarShips.jar"/>
+            </manifest>
+        </jar>
+    </target>
+              	
+              	<target name="run-jar">
+              	   <java jar="jar/StarShips.jar" fork='true'>
+              	      <arg value="${arg0}"/>
+              	      <arg value="${arg1}"/>
+              	   </java>
+              	</target>          	
+              	
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target name="StarShips">
+        <java classname="com.brycevalero.starships.StarShips" failonerror="true" fork="true">
+            <classpath refid="StarShips.classpath"/>
+        </java>
+    </target>
+              	
+              	
+</project>

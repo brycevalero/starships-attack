@@ -3,8 +3,9 @@ package com.brycevalero.starships.screens;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Toolkit;
+import java.net.URL;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import com.brycevalero.starships.framework.Config;
@@ -36,10 +37,14 @@ public class TitleScreen extends JPanel {
 
 		setFocusable(true);
 		setBackground(Color.BLUE);
-		title = Toolkit.getDefaultToolkit().getImage("images/title.png");
-		background = Toolkit.getDefaultToolkit().getImage("images/universe-background-1.jpg");
 
-		themeSong = new Music("sound/TechnoWarmup.wav");
+		URL url = TitleScreen.class.getResource("/images/title.png");
+		title = new ImageIcon(url).getImage();
+
+		url = TitleScreen.class.getResource("/images/universe-background-1.jpg");
+		background = new ImageIcon(url).getImage();
+
+		themeSong = new Music("/sound/TechnoWarmup.wav");
 		state = State.IDLE;
 
 	}
