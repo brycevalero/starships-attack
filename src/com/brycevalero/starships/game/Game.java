@@ -18,7 +18,9 @@ import com.brycevalero.starships.sound.SoundFX;
 public class Game extends JPanel {
 
 	private Hero hero;
+	private Thrust thrust;
 	private Star[] star;
+	private List<Asteroid> asteroids;
 	private List<Enemy> enemies;
 	private List<Weapon> ammo;
 	private List<Explosion> explosions;
@@ -45,13 +47,19 @@ public class Game extends JPanel {
 		// ImageIcon heroIcon = new ImageIcon("images/hero.png");
 
 		hero = new Hero("/images/hero.png", 50, 100, Config.SCREEN);
+		thrust = new Thrust();
 		enemies = new ArrayList<Enemy>();
+		asteroids = new ArrayList<Asteroid>();
 		ammo = new ArrayList<Weapon>();
 		explosions = new ArrayList<Explosion>();
 
 		star = new Star[numOfStars];
 		for (int i = 0; i < numOfStars; i++) {
 			star[i] = new Star(Config.SCREEN.width, Config.SCREEN.height);
+		}
+
+		for (int i = 0; i < 10; i++) {
+			asteroids.add(new Asteroid("/images/asteroid1/asteroid2.gif", 0, 0, Config.SCREEN));
 		}
 
 		enemyCount = 5;
@@ -87,6 +95,15 @@ public class Game extends JPanel {
 		}
 	}
 
+	public void addEnemies() {
+		if (enemyCount > Config.MAX_ENEMIES) {
+			enemyCount = Config.MAX_ENEMIES;
+		}
+		for (int i = 0; i < enemyCount; i++) {
+			addEnemy();
+		}
+	}
+
 	public void addEnemy() {
 		// ImageIcon enemyIcon = new ImageIcon("images/enemy.png");
 		enemies.add(new Enemy("/images/enemy.png", 0, 0, Config.SCREEN));
@@ -115,26 +132,27 @@ public class Game extends JPanel {
 	}
 
 	public void checkCollision() {
-		for (int i = 0; i < enemies.size(); i++) {
-			for (int j = 0; j < ammo.size(); j++) {
-				if (ammo.get(j).getBounds().intersects(enemies.get(i).getBounds())) {
-					enemyCollision(enemies.get(i).getPosition());
-					ammo.remove(j);
-					enemies.remove(i);
+
+		List<Enemy> enemiesFound = new ArrayList<Enemy>();
+		List<Weapon> weaponsFound = new ArrayList<Weapon>();
+		for (Enemy enemy : enemies) {
+			for (Weapon bullet : ammo) {
+				if (bullet.getBounds().intersects(enemy.getBounds())) {
+					enemyCollision(enemy.getPosition());
+					enemiesFound.add(enemy);
+					weaponsFound.add(bullet);
 				}
 			}
-		}
 
-		// we have to loop through enemies again in case the size of list has
-		// changed
-		for (int i = 0; i < enemies.size(); i++) {
-			if (hero.getBounds().intersects(enemies.get(i).getBounds())) {
-				enemyCollision(enemies.get(i).getPosition());
-				heroCollision(enemies.get(i).getPosition());
-				enemies.remove(i);
+			if (hero.getBounds().intersects(enemy.getBounds())) {
+				enemyCollision(enemy.getPosition());
+				heroCollision(hero.getPosition());
+				enemiesFound.add(enemy);
 				hero.respawn();
 			}
 		}
+		enemies.removeAll(enemiesFound);
+		ammo.removeAll(weaponsFound);
 
 		for (int i = 0; i < ammo.size(); i++) {
 			if (ammo.get(i).isOffscreen()) {
@@ -149,6 +167,18 @@ public class Game extends JPanel {
 		}
 	}
 
+	public void checkStatus() {
+		if (enemies.size() <= 0) {
+			enemyCount += 2;
+			dashboard.level++;
+			addEnemies();
+		}
+
+		if (dashboard.lives <= 0) {
+			state = State.GAMEOVER;
+		}
+	}
+
 	public void move() {
 
 		if (state == State.PAUSE) {
@@ -157,6 +187,10 @@ public class Game extends JPanel {
 
 		for (int i = 0; i < star.length; i++) {
 			star[i].move();
+		}
+
+		for (int i = 0; i < asteroids.size(); i++) {
+			asteroids.get(i).move();
 		}
 
 		for (int i = 0; i < enemies.size(); i++) {
@@ -172,9 +206,11 @@ public class Game extends JPanel {
 		}
 
 		hero.move();
+		thrust.move((int) (hero.x + hero.width / 2 - 10), (int) (hero.y + hero.height));
 
 		// dont check collisions until all objects have been moved
 		checkCollision();
+		checkStatus();
 	}
 
 	/**
@@ -192,6 +228,10 @@ public class Game extends JPanel {
 			star[i].draw(g2d);
 		}
 
+		for (int i = 0; i < asteroids.size(); i++) {
+			asteroids.get(i).draw(g2d);
+		}
+
 		for (int i = 0; i < enemies.size(); i++) {
 			enemies.get(i).draw(g2d);
 		}
@@ -205,6 +245,7 @@ public class Game extends JPanel {
 		}
 
 		hero.draw(g2d);
+		thrust.draw(g2d);
 		dashboard.draw(g2d);
 	}
 

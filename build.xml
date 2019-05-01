@@ -60,12 +60,12 @@
         </jar>
     </target>
               	
-              	<target name="run-jar">
-              	   <java jar="jar/StarShips.jar" fork='true'>
-              	      <arg value="${arg0}"/>
-              	      <arg value="${arg1}"/>
-              	   </java>
-              	</target>          	
+  	<target name="run-jar">
+  	   <java jar="jar/StarShips.jar" fork='true'>
+  	      <arg value="${arg0}"/>
+  	      <arg value="${arg1}"/>
+  	   </java>
+  	</target>          	
               	
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
     <target name="StarShips">

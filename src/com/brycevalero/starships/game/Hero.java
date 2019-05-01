@@ -3,8 +3,12 @@ package com.brycevalero.starships.game;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
+import com.brycevalero.starships.framework.Config;
+
 @SuppressWarnings("serial")
 public class Hero extends Sprite {
+
+	private boolean invincible;
 
 	public Hero(String img, int startx, int starty, Dimension bounds) {
 		super(img, startx, starty, bounds);
@@ -105,7 +109,16 @@ public class Hero extends Sprite {
 	}
 
 	public void respawn() {
+		this.x = Config.SCREEN.width / 2 - this.width - 2;
+		this.y = (-100);
+	}
 
+	public void setInvincible(boolean state) {
+		invincible = state;
+	}
+
+	public boolean isInvincible() {
+		return invincible;
 	}
 
 }

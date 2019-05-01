@@ -267,7 +267,11 @@ public class MainLoop extends Canvas implements KeyListener {
 		case GAME_PLAY:
 			game.keyPressed(e);
 			if (key == KeyEvent.VK_P) {
-				Game.state = Game.State.PAUSE;
+				if (Game.state != Game.State.PAUSE) {
+					Game.state = Game.State.PAUSE;
+				} else {
+					Game.state = Game.State.PLAY;
+				}
 			}
 			if (key == KeyEvent.VK_Q) {
 				TitleScreen.state = TitleScreen.State.ACTIVE;

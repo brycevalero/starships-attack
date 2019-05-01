@@ -9,8 +9,6 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import com.brycevalero.starships.screens.TitleScreen;
-
 @SuppressWarnings("serial")
 public abstract class Sprite extends JPanel {
 
@@ -40,7 +38,7 @@ public abstract class Sprite extends JPanel {
 
 		screenSize = bounds;
 
-		URL url = TitleScreen.class.getResource(img);
+		URL url = Sprite.class.getResource(img);
 		image = new ImageIcon(url).getImage();
 
 		width = 100;
