@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sound.sampled.Clip;
 import javax.swing.JPanel;
 
 import com.brycevalero.starships.framework.Config;
@@ -55,7 +56,7 @@ public class Game extends JPanel {
 
 		star = new Star[numOfStars];
 		for (int i = 0; i < numOfStars; i++) {
-			star[i] = new Star(Config.SCREEN.width, Config.SCREEN.height);
+			star[i] = new Star();
 		}
 
 		for (int i = 0; i < 10; i++) {
@@ -73,7 +74,7 @@ public class Game extends JPanel {
 		dashboard = Dashboard.getInstance();
 
 		themeSong = new Music("/sound/TechnoWarmup.wav");
-		themeSong.loop(100);
+		themeSong.loop(Clip.LOOP_CONTINUOUSLY);
 		// themeSong.play();
 
 		state = State.PLAY;
@@ -206,7 +207,7 @@ public class Game extends JPanel {
 		}
 
 		hero.move();
-		thrust.move((int) (hero.x + hero.width / 2 - 10), (int) (hero.y + hero.height));
+		thrust.move((int) (hero.x + hero.width / 2 - thrust.getDiameter()), (int) (hero.y + hero.height));
 
 		// dont check collisions until all objects have been moved
 		checkCollision();
