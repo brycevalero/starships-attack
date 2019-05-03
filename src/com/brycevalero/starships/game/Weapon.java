@@ -5,36 +5,23 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-public class Weapon {
+public class Weapon extends Particle {
 
-	private int diameter;
-	private Color color;
-	private Point position;
-	private int speed;
 	private boolean offscreen;
-	private boolean fired;
 
 	public Weapon(Point coord) {
+		super();
 		diameter = 15;
 		color = new Color(255, 255, 255);
-		position = coord;
-		speed = 15;
+		x = coord.x;
+		y = coord.y;
+		speedX = 0;
+		speedY = -15;
 		offscreen = false;
-		fired = false;
-	}
-
-	public void checkBoundries() {
-		if (position.y < -100) {
-			offscreen = true;
-		}
 	}
 
 	public Rectangle getBounds() {
-		return new Rectangle(position.x, position.y, diameter, diameter);
-	}
-
-	public Point getPosition() {
-		return position;
+		return new Rectangle(this.x, this.y, diameter, diameter);
 	}
 
 	public boolean isOffscreen() {
@@ -42,13 +29,16 @@ public class Weapon {
 	}
 
 	public void move() {
-		position.y = (position.y - speed);
+		this.x += speedX;
+		this.y = ((int) (this.y + speedY));
 
-		checkBoundries();
+		if (this.y < -100) {
+			offscreen = true;
+		}
 	}
 
 	public void draw(Graphics g) {
 		g.setColor(color);
-		g.fillOval((position.x - (diameter / 2)), (position.y - (diameter / 2)), diameter, diameter);
+		g.fillOval((this.x - (diameter / 2)), (this.y - (diameter / 2)), diameter, diameter);
 	}
 }

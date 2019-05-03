@@ -16,12 +16,7 @@ public class Music {
 
 	public Music(String resource) {
 		try {
-			// This can also be used for system wide resources
-			// InputStream soundStream =
-			// getClass().getResourceAsStream(resource);
-
-			// Use an input stream instead of a file so we can read resources in
-			// jar.
+			// Use an inputstream instead of file so we can read in jar.
 			InputStream audioInputStream = Music.class.getResourceAsStream(resource);
 			// add buffer for mark/reset support
 			InputStream audioBuffered = new BufferedInputStream(audioInputStream);

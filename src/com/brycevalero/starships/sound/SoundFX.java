@@ -14,11 +14,7 @@ public class SoundFX {
 
 	public static void play(String resource) {
 		try {
-			// This can also be used for system wide resources
-			// InputStream soundStream =
-			// getClass().getResourceAsStream(resource);
-
-			// Use an stream instead of a file so we can read resources in jar.
+			// Use an inputstream instead of file so we can read in jar.
 			InputStream audioInputStream = Music.class.getResourceAsStream(resource);
 			// add buffer for mark/reset support
 			InputStream audioBuffered = new BufferedInputStream(audioInputStream);

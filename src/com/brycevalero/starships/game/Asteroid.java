@@ -24,8 +24,8 @@ public class Asteroid extends Sprite {
 		gravity = random.nextInt(Config.MAX_ENEMY_SPEED) * .01;
 
 		// we dont want enemy to be too slow, so lets make sure it doesnt stop
-		while (gravity < .05) {
-			gravity = random.nextInt(Config.MAX_ENEMY_SPEED) * .01;
+		if (gravity < .05) {
+			gravity = .05;
 		}
 	}
 
@@ -61,7 +61,7 @@ public class Asteroid extends Sprite {
 		if (y > Config.SCREEN.height) {
 			x = random.nextInt(Config.SCREEN.width);
 			y = (-100);
-			setGravity(); // give a new value just so things don't get stale
+			setGravity();
 		}
 	}
 

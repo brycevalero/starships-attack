@@ -18,13 +18,7 @@ import com.brycevalero.starships.screens.TitleScreen;
 @SuppressWarnings("serial")
 public class MainLoop extends Canvas implements KeyListener {
 
-	/**
-	 * Width of the frame.
-	 */
 	public static int frameWidth;
-	/**
-	 * Height of the frame.
-	 */
 	public static int frameHeight;
 
 	/**
@@ -37,36 +31,22 @@ public class MainLoop extends Canvas implements KeyListener {
 	 * nanoseconds
 	 */
 	public static final long milisecInNanosec = 1000000L;
-
-	/**
-	 * FPS - Frames per second How many times per second the game should update?
-	 */
 	private final int GAME_FPS = 60;
 
-	/**
-	 * Pause between updates. It is in nanoseconds.
-	 */
+	// Pause between updates. It is in nanoseconds.
 	private final long GAME_UPDATE_PERIOD = secInNanosec / GAME_FPS;
 
-	/**
-	 * Possible states of the game
-	 */
+	// Possible states of the game
 	public static enum MainState {
 		VISUALIZING, INITIALIZING, TITLE_SCREEN, GAME_PLAY
 	}
 
-	/**
-	 * Current state of the game
-	 */
+	// Current state of the game
 	public static MainState mainState;
-
-	/**
-	 * Elapsed game time in nanoseconds.
-	 */
+	// Elapsed game time in nanoseconds.
 	private long gameTime;
 	// It is used for calculating elapsed time.
 	private long lastTime;
-
 	// main title screen
 	private TitleScreen titleScreen;
 	// The actual game
@@ -128,15 +108,11 @@ public class MainLoop extends Canvas implements KeyListener {
 			switch (mainState) {
 			case GAME_PLAY:
 				gameTime += System.nanoTime() - lastTime;
-				// game.UpdateGame(gameTime, mousePosition());
 				game.loop();
 				lastTime = System.nanoTime();
 				break;
 			case TITLE_SCREEN:
 				titleScreen.loop();
-				// if (TitleScreen.state == TitleScreen.State.IDLE) {
-				// mainState = MainState.GAME_PLAY;
-				// }
 				break;
 			case INITIALIZING:
 				// Sets variables and objects.

@@ -27,7 +27,9 @@ public class Game extends JPanel {
 	private List<Explosion> explosions;
 	private Dashboard dashboard;
 	private Music themeSong;
-	private int enemyCount;
+	private int numOfStars;
+	private int numOfAsteriods;
+	private int numOfEnemies;
 
 	public static enum State {
 		PLAY, PAUSE, GAMEOVER, DESTROYED
@@ -41,12 +43,11 @@ public class Game extends JPanel {
 
 	public void initGame() {
 
-		int numOfStars = Config.SCREEN.width / 10;
 		setFocusable(true);
 		setBackground(Color.BLACK);
-
-		// ImageIcon heroIcon = new ImageIcon("images/hero.png");
-
+		numOfStars = Config.SCREEN.width / 10;
+		numOfAsteriods = 10;
+		numOfEnemies = 5;
 		hero = new Hero("/images/hero.png", 50, 100, Config.SCREEN);
 		thrust = new Thrust();
 		enemies = new ArrayList<Enemy>();
@@ -59,15 +60,14 @@ public class Game extends JPanel {
 			star[i] = new Star();
 		}
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < numOfAsteriods; i++) {
 			asteroids.add(new Asteroid("/images/asteroid1/asteroid2.gif", 0, 0, Config.SCREEN));
 		}
 
-		enemyCount = 5;
-		if (enemyCount > Config.MAX_ENEMIES) {
-			enemyCount = Config.MAX_ENEMIES;
+		if (numOfEnemies > Config.MAX_ENEMIES) {
+			numOfEnemies = Config.MAX_ENEMIES;
 		}
-		for (int i = 0; i < enemyCount; i++) {
+		for (int i = 0; i < numOfEnemies; i++) {
 			addEnemy();
 		}
 
@@ -75,7 +75,6 @@ public class Game extends JPanel {
 
 		themeSong = new Music("/sound/TechnoWarmup.wav");
 		themeSong.loop(Clip.LOOP_CONTINUOUSLY);
-		// themeSong.play();
 
 		state = State.PLAY;
 	}
@@ -97,10 +96,10 @@ public class Game extends JPanel {
 	}
 
 	public void addEnemies() {
-		if (enemyCount > Config.MAX_ENEMIES) {
-			enemyCount = Config.MAX_ENEMIES;
+		if (numOfEnemies > Config.MAX_ENEMIES) {
+			numOfEnemies = Config.MAX_ENEMIES;
 		}
-		for (int i = 0; i < enemyCount; i++) {
+		for (int i = 0; i < numOfEnemies; i++) {
 			addEnemy();
 		}
 	}
@@ -170,7 +169,7 @@ public class Game extends JPanel {
 
 	public void checkStatus() {
 		if (enemies.size() <= 0) {
-			enemyCount += 2;
+			numOfEnemies += 2;
 			dashboard.level++;
 			addEnemies();
 		}

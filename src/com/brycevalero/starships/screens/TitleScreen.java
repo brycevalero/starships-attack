@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.net.URL;
 
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -36,7 +37,7 @@ public class TitleScreen extends JPanel {
 	public void initTitleScreen() {
 
 		setFocusable(true);
-		setBackground(Color.BLUE);
+		setBackground(Color.BLACK);
 
 		URL url = TitleScreen.class.getResource("/images/title.png");
 		title = new ImageIcon(url).getImage();
@@ -52,7 +53,7 @@ public class TitleScreen extends JPanel {
 	public void loop() {
 		switch (state) {
 		case ACTIVE:
-			themeSong.loop(100);
+			themeSong.loop(Clip.LOOP_CONTINUOUSLY);
 			themeSong.play();
 			break;
 		case IDLE:
